@@ -1,23 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
-
+import "./App.css";
+import { Configuration, OpenAIApi } from "openai";
+import { useState } from "react";
+import { BsFillSendFill } from 'react-icons/bs'
 function App() {
+  //   const config=require("config")
+  // const chatKey=config.get.chatKey
+  const configration = new Configuration({
+    apiKey: "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",
+  });
+
+  const openAi = new OpenAIApi(configration);
+  const [prompt, setPrompt] = useState("");
+  const [resuslt, setResuslt] = useState("");
+  const [loading, setLoading] = useState(false);
+  console.log(resuslt);
+  const handleClick = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const res = await openAi.createCompletion({
+        model: "text-davinci-003",
+        prompt: prompt,
+        temperature: 0.5,
+        max_tokens: 100,
+      });
+      console.log(res);
+      setResuslt(res.data.choices[0].text);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <form onSubmit={handleClick}>
+        <input
+          type="text"
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+        />
+        <BsFillSendFill className="icon"/>
+      </form>
+      {loading ? "loading" : resuslt.length && <pre className="pre">{resuslt}</pre>}
     </div>
   );
 }
