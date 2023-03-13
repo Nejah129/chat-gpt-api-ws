@@ -1,13 +1,14 @@
 import "./App.css";
 import { Configuration, OpenAIApi } from "openai";
 import { useState } from "react";
-import { BsFillSendFill } from 'react-icons/bs'
+import { BsFillSendFill } from "react-icons/bs";
 function App() {
   //   const config=require("config")
   // const chatKey=config.get.chatKey
   const configration = new Configuration({
-    apiKey: "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",
+    apiKey: "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",
   });
+  // console.log(process.env.chatKey)
 
   const openAi = new OpenAIApi(configration);
   const [prompt, setPrompt] = useState("");
@@ -40,9 +41,11 @@ function App() {
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
         />
-        <BsFillSendFill className="icon"/>
+        <BsFillSendFill className="icon" />
       </form>
-      {loading ? "loading" : resuslt.length && <pre className="pre">{resuslt}</pre>}
+      {loading
+        ? "loading"
+        : resuslt.length && <input className="pre" value={resuslt}/>}
     </div>
   );
 }
